@@ -1,7 +1,10 @@
-package com.example.a073105.daggerdemo.activities;
+package com.example.a073105.daggerdemo.activities.homepage;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.example.a073105.daggerdemo.R;
+import com.example.a073105.daggerdemo.activities.SettingActivity;
 import com.example.a073105.daggerdemo.fragments.ConstantFragment;
 import com.example.a073105.daggerdemo.fragments.FindFragment;
 import com.example.a073105.daggerdemo.fragments.HomeFragment;
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity
                     MeFragment.OnFragmentInteractionListener ,
                     HasSupportFragmentInjector {
 
+    private static final String TAG = "MainActivity";
+
     @Inject
     DispatchingAndroidInjector<Fragment> supportFragmentInjector;
 
@@ -61,12 +68,24 @@ public class MainActivity extends AppCompatActivity
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initViewModel();
         settingActionBar();
         settingHomeFragment();
         settingBottonMenu();
 
 
 
+    }
+
+    private void initViewModel() {
+
+        HomeViewModel homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.getUserImgUrl().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                Log.d(TAG, "onChanged: urlImgUrl:" + s);
+            }
+        });
     }
 
     @Override
@@ -143,16 +162,14 @@ public class MainActivity extends AppCompatActivity
     private void switchFragment(Class<? extends Fragment> fragmentClazz){
 
 
+        Fragment fragment = fragmentHashMap.get(fragmentClazz);
+        switchFragmentNow(fragment);
         /*
-          已经存在该碎片
+          不存在该碎片
          */
-        if(fragmentHashMap.containsKey(fragmentClazz)){
-            Fragment fragment = fragmentHashMap.get(fragmentClazz);
-            switchFragmentNow(fragment);
-
-        }else {//不存在该碎片
+        if(fragment == null){
             try {
-                Fragment fragment =  fragmentClazz.newInstance();
+                fragment =  fragmentClazz.newInstance();
                 fragmentHashMap.put(fragmentClazz,fragment);
                 FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.container,fragment,fragmentClazz.getSimpleName());

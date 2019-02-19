@@ -1,12 +1,11 @@
 package com.example.a073105.daggerdemo.components;
 
-import com.example.a073105.daggerdemo.activities.MainActivity;
+import com.example.a073105.daggerdemo.activities.homepage.MainActivity;
 import com.example.a073105.daggerdemo.modules.MainActivityModule;
 import com.example.a073105.daggerdemo.modules.SubComOfMainActivityModule;
 
 import javax.inject.Named;
 
-import dagger.BindsInstance;
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
 

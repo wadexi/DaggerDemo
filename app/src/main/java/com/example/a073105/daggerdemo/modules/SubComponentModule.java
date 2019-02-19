@@ -1,6 +1,6 @@
 package com.example.a073105.daggerdemo.modules;
 
-import com.example.a073105.daggerdemo.activities.MainActivity;
+import com.example.a073105.daggerdemo.activities.homepage.MainActivity;
 import com.example.a073105.daggerdemo.activities.SettingActivity;
 import com.example.a073105.daggerdemo.components.MainActivityComponent;
 import com.example.a073105.daggerdemo.components.SettingActivityModule;

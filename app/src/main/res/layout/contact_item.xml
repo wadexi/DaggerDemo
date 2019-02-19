@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/contact_headimg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@mipmap/ic_launcher_round"/>
+
+    <!--不套布局 下边两个怎么整体居中？？？？？？-->
+
+    <TextView
+        android:id="@+id/contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="刘老师"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:padding="4dp"
+        app:layout_constraintLeft_toRightOf="@id/contact_headimg"
+        app:layout_constraintTop_toTopOf="@id/contact_headimg"
+        />
+
+    <TextView
+        android:id="@+id/contact_phone_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="131****8677"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:paddingLeft="4dp"
+        android:paddingBottom="4dp"
+        app:layout_constraintLeft_toLeftOf="@id/contact_name"
+        app:layout_constraintBottom_toBottomOf="@id/contact_headimg"
+        />
+
+
+
+</android.support.constraint.ConstraintLayout>

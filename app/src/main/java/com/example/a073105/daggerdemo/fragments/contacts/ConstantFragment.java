@@ -1,15 +1,16 @@
-package com.example.a073105.daggerdemo.fragments;
+package com.example.a073105.daggerdemo.fragments.contacts;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,15 @@ import android.widget.LinearLayout;
 import com.example.a073105.daggerdemo.R;
 import com.example.a073105.daggerdemo.adapters.ContactAdapter;
 import com.example.a073105.daggerdemo.beans.ContactData;
+
 import android.support.v4.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,9 +40,18 @@ import java.util.List;
 public class ConstantFragment extends Fragment {
 
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0x0001;
     Context applicationContext;
     RecyclerView recyclerView;
     List<ContactData> mDatas = new ArrayList<>();
+    ContactAdapter contactAdapter;
+
+
+
+    @Inject
+    public ViewModelProvider.AndroidViewModelFactory viewModelFactory;
+
+    ConstantFragmentModel model;
 
     private static final String TAG = "ConstantFragment";
 
@@ -68,27 +84,59 @@ public class ConstantFragment extends Fragment {
         applicationContext = getActivity().getApplicationContext();
         initView();
 
-
-        Cursor descCursor = getActivity().getContentResolver().
-                query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        new String[]{
-                                ContactsContract.Contacts._ID,
-                                ContactsContract.Contacts.LOOKUP_KEY,
-                                ContactsContract.Contacts.PHOTO_URI,
-                                ContactsContract.Contacts.DISPLAY_NAME,
-                                ContactsContract.CommonDataKinds.Phone.NUMBER},
-                        null,
-                        null,
-                        "desc");
-
-        if (descCursor != null) {
-            while (descCursor.moveToNext()) {
-                String photoUri = descCursor.getString(descCursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-                String name = descCursor.getString(descCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String photoNum = descCursor.getString(descCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                Log.d(TAG, "onCreate: photoUri:" + photoUri + "  name:" + name + "  photoNum:" + photoNum);
+        model = ViewModelProviders.of(this,viewModelFactory).get(ConstantFragmentModel.class);
+        model.getMutableLiveData().observe(this, new Observer<List<ContactData>>() {
+            @Override
+            public void onChanged(List<ContactData> contactData) {
+                mDatas.clear();
+                mDatas.addAll(contactData);
             }
+        });
+
+
+        if(requestPermission()){
+            initData();
         }
+
+    }
+
+    private boolean requestPermission() {
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_CONTACTS},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else {
+            return true;
+        }
+        return false;
+    }
+
+    private void initData() {
+
+        model.getContactDatas();
+
 
     }
 
@@ -98,7 +146,8 @@ public class ConstantFragment extends Fragment {
     private void initView() {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(applicationContext,LinearLayout.VERTICAL,false));
-        recyclerView.setAdapter(new ContactAdapter(applicationContext,mDatas));
+        contactAdapter = new ContactAdapter(applicationContext, mDatas);
+        recyclerView.setAdapter(contactAdapter);
 
     }
 
@@ -113,6 +162,7 @@ public class ConstantFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -140,5 +190,32 @@ public class ConstantFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void dataFromConstant(String uri);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    initData();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 }

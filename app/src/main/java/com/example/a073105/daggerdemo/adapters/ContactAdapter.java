@@ -42,7 +42,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 //        holder.headImg
         ContactData contactData = mDatas.get(position);
-
+        holder.headImg.setImageBitmap(contactData.getHeadImgUrl());
         holder.name.setText(contactData.getName());
         holder.phoneNum.setText(contactData.getPhoneNum());
 

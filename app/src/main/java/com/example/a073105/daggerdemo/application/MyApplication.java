@@ -5,7 +5,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.a073105.daggerdemo.beans.Bean1;
-import com.example.a073105.daggerdemo.components.DaggerAppComponent;
+import com.example.a073105.daggerdemo.dagger2.components.DaggerAppComponent;
 
 import javax.inject.Inject;
 
@@ -26,7 +26,7 @@ public class MyApplication extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerAppComponent.builder().build().inject(this);
+        DaggerAppComponent.builder().application(this).build().inject(this);
         Log.d(TAG, "onCreate: bean1:" + bean1.toString());
     }
 

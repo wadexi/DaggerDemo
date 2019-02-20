@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.components;
+package com.example.a073105.daggerdemo.dagger2.components;
 
 import javax.inject.Named;
 

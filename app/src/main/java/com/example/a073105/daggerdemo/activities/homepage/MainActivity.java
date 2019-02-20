@@ -21,7 +21,7 @@ import android.widget.RadioGroup;
 
 import com.example.a073105.daggerdemo.R;
 import com.example.a073105.daggerdemo.activities.SettingActivity;
-import com.example.a073105.daggerdemo.fragments.ConstantFragment;
+import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragment;
 import com.example.a073105.daggerdemo.fragments.FindFragment;
 import com.example.a073105.daggerdemo.fragments.HomeFragment;
 import com.example.a073105.daggerdemo.fragments.MeFragment;
@@ -34,7 +34,6 @@ import javax.inject.Named;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasFragmentInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity

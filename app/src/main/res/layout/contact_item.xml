@@ -25,6 +25,7 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:padding="4dp"
+        android:textColor="@android:color/black"
         app:layout_constraintLeft_toRightOf="@id/contact_headimg"
         app:layout_constraintTop_toTopOf="@id/contact_headimg"
         />
@@ -36,6 +37,7 @@
         android:text="131****8677"
         android:textStyle="bold"
         android:textSize="18sp"
+        android:textColor="@android:color/black"
         android:paddingLeft="4dp"
         android:paddingBottom="4dp"
         app:layout_constraintLeft_toLeftOf="@id/contact_name"

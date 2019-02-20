@@ -1,17 +1,24 @@
 package com.example.a073105.daggerdemo.beans;
 
+import android.graphics.Bitmap;
+
 public class ContactData {
 
-    private String headImgUrl;
+    private Bitmap headImgUrl;
     private String name;
     private String phoneNum;
 
+    public ContactData(Bitmap headImgUrl, String name, String phoneNum) {
+        this.headImgUrl = headImgUrl;
+        this.name = name;
+        this.phoneNum = phoneNum;
+    }
 
-    public String getHeadImgUrl() {
+    public Bitmap getHeadImgUrl() {
         return headImgUrl;
     }
 
-    public void setHeadImgUrl(String headImgUrl) {
+    public void setHeadImgUrl(Bitmap headImgUrl) {
         this.headImgUrl = headImgUrl;
     }
 

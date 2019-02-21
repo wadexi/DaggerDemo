@@ -13,7 +13,7 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 @Singleton
-public class ContactsFragModelFactory extends ViewModelProvider.AndroidViewModelFactory {
+public class MyAndroidViewModelFactory extends ViewModelProvider.AndroidViewModelFactory {
 
 
     private final Map<Class<? extends AndroidViewModel>,Provider<AndroidViewModel>> creators;
@@ -21,7 +21,7 @@ public class ContactsFragModelFactory extends ViewModelProvider.AndroidViewModel
 
 
     @Inject
-    public ContactsFragModelFactory(Application application,Map<Class<? extends AndroidViewModel>, Provider<AndroidViewModel>> creators) {
+    public MyAndroidViewModelFactory(Application application, Map<Class<? extends AndroidViewModel>, Provider<AndroidViewModel>> creators) {
         super(application);
         this.creators = creators;
     }

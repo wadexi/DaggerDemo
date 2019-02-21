@@ -3,6 +3,7 @@
     package="com.android.wadexi.basedemo">
 
     <uses-permission android:name = "android.permission.READ_CONTACTS" />
+    <uses-permission android:name = "android.permission.INTERNET" />
 
     <application
         android:name="com.android.wadexi.basedemo.application.MyApplication"

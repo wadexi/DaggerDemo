@@ -1,14 +1,26 @@
 package com.android.wadexi.basedemo.architecture.ui.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.wadexi.basedemo.R;
+import com.android.wadexi.basedemo.architecture.viewmodel.fragments.ConstantFragmentModel;
+import com.android.wadexi.basedemo.architecture.viewmodel.fragments.HomeFragmentModel;
+import com.android.wadexi.basedemo.beans.ContactData;
+import com.android.wadexi.basedemo.beans.CookBookBean;
+import com.android.wadexi.basedemo.beans.ResponBean;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,12 +38,17 @@ import dagger.android.support.AndroidSupportInjection;
 public class HomeFragment extends Fragment {
 
 
+    private static final String TAG = "HomeFragment";
 
     @Inject
     @Named("HomeFragmentString")
     String content;
 
+    @Inject
+    public ViewModelProvider.AndroidViewModelFactory viewModelFactory;
+
     private OnFragmentInteractionListener mListener;
+    private HomeFragmentModel model;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -48,16 +65,22 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        model = ViewModelProviders.of(this,viewModelFactory).get(HomeFragmentModel.class);
+        model.getMutableLiveData().observe(this, new Observer<CookBookBean>() {
+            @Override
+            public void onChanged(@Nullable CookBookBean cookBookBeanResponBean) {
+                Log.d(TAG, "onChanged: " + cookBookBeanResponBean.toString());
+            }
+        });
 
-
+        model.getCookMenu("土豆丝",2);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

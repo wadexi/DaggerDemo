@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.fragments.contacts;
+package com.example.a073105.daggerdemo.dagger2.andriodviewmodelfactory;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

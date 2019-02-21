@@ -1,7 +1,6 @@
-package com.example.a073105.daggerdemo.annotation;
+package com.example.a073105.daggerdemo.dagger2.annotation;
 
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.ViewModel;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,6 +12,6 @@ import dagger.MapKey;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @MapKey
-public @interface ViewModelKey {
+public @interface AndroidViewModelKey {
     Class<? extends AndroidViewModel> value();
 }

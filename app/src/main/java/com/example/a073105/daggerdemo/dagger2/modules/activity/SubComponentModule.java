@@ -2,6 +2,9 @@ package com.example.a073105.daggerdemo.dagger2.modules.activity;
 
 import com.example.a073105.daggerdemo.activities.SettingActivity;
 import com.example.a073105.daggerdemo.activities.homepage.MainActivity;
+import com.example.a073105.daggerdemo.dagger2.annotation.ActivityScope;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -18,6 +21,7 @@ public abstract class SubComponentModule {
 //    abstract AndroidInjector.Factory<?>
 //                                bindMainActivityInjectorFactory(MainActivityComponent.Builder builder);
 
+    @ActivityScope
     @ContributesAndroidInjector(modules = SettingActivityModule.class)
     abstract SettingActivity contributeSettingActivity();
 

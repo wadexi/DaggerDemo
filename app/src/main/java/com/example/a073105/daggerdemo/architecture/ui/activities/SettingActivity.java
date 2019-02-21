@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.activities;
+package com.example.a073105.daggerdemo.architecture.ui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

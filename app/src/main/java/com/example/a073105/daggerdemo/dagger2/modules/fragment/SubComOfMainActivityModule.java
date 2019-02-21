@@ -1,7 +1,7 @@
 package com.example.a073105.daggerdemo.dagger2.modules.fragment;
 
-import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragment;
-import com.example.a073105.daggerdemo.fragments.HomeFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.ConstantFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.HomeFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

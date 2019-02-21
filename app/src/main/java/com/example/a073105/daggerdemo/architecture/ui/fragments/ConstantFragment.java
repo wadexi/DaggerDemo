@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.fragments.contacts;
+package com.example.a073105.daggerdemo.architecture.ui.fragments;
 
 import android.Manifest;
 import android.arch.lifecycle.Observer;
@@ -17,8 +17,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.a073105.daggerdemo.R;
-import com.example.a073105.daggerdemo.adapters.ContactAdapter;
+import com.example.a073105.daggerdemo.architecture.ui.adapters.ContactAdapter;
 import com.example.a073105.daggerdemo.beans.ContactData;
+import com.example.a073105.daggerdemo.architecture.viewmodel.fragments.ConstantFragmentModel;
 
 import android.support.v4.app.Fragment;
 

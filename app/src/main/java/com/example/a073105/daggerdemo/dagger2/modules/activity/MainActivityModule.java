@@ -2,8 +2,8 @@ package com.example.a073105.daggerdemo.dagger2.modules.activity;
 
 import com.example.a073105.daggerdemo.dagger2.modules.fragment.ContactFragmentModule;
 import com.example.a073105.daggerdemo.dagger2.modules.fragment.HomeFragmentModule;
-import com.example.a073105.daggerdemo.fragments.HomeFragment;
-import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.HomeFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.ConstantFragment;
 
 import javax.inject.Named;
 

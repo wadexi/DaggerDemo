@@ -1,10 +1,8 @@
 package com.example.a073105.daggerdemo.dagger2.modules.activity;
 
-import com.example.a073105.daggerdemo.activities.SettingActivity;
-import com.example.a073105.daggerdemo.activities.homepage.MainActivity;
+import com.example.a073105.daggerdemo.architecture.ui.activities.SettingActivity;
+import com.example.a073105.daggerdemo.architecture.ui.activities.MainActivity;
 import com.example.a073105.daggerdemo.dagger2.annotation.ActivityScope;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

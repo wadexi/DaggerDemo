@@ -4,7 +4,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.example.a073105.daggerdemo.dagger2.annotation.AndroidViewModelKey;
-import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragmentModel;
+import com.example.a073105.daggerdemo.architecture.viewmodel.fragments.ConstantFragmentModel;
 import com.example.a073105.daggerdemo.dagger2.andriodviewmodelfactory.ContactsFragModelFactory;
 
 import dagger.Binds;

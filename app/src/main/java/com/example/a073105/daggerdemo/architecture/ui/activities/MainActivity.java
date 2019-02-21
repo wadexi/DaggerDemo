@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.activities.homepage;
+package com.example.a073105.daggerdemo.architecture.ui.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -20,11 +20,11 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.example.a073105.daggerdemo.R;
-import com.example.a073105.daggerdemo.activities.SettingActivity;
-import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragment;
-import com.example.a073105.daggerdemo.fragments.FindFragment;
-import com.example.a073105.daggerdemo.fragments.HomeFragment;
-import com.example.a073105.daggerdemo.fragments.MeFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.ConstantFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.FindFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.HomeFragment;
+import com.example.a073105.daggerdemo.architecture.ui.fragments.MeFragment;
+import com.example.a073105.daggerdemo.architecture.viewmodel.activity.HomeViewModel;
 
 import java.util.HashMap;
 

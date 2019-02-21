@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.activities.homepage;
+package com.example.a073105.daggerdemo.architecture.viewmodel.activity;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

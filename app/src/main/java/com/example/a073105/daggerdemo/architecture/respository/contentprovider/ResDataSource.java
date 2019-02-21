@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.respository.contentprovider;
+package com.example.a073105.daggerdemo.architecture.respository.contentprovider;
 
 import android.app.Application;
 import android.content.ContentResolver;

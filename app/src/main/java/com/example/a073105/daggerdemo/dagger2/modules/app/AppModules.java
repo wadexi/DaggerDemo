@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.dagger2.modules;
+package com.example.a073105.daggerdemo.dagger2.modules.app;
 
 import android.app.Application;
 
@@ -11,10 +11,10 @@ import javax.inject.Singleton;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.support.AndroidSupportInjectionModule;
 
-@Module(/*subcomponents = {
-        MainActivityComponent.class
-    }*/
+@Module(
+        includes = AndroidSupportInjectionModule.class
 )
 public abstract class AppModules {
 
@@ -24,13 +24,11 @@ public abstract class AppModules {
         return"1";
     }
 
-
-//    @Binds
+    @Binds
 //    @Singleton
-//    // Singleton annotation isn't necessary (in this case since Application instance is unique)
-//    // but is here for convention.
-//    abstract Application application(MyApplication app);
-
+    // Singleton annotation isn't necessary (in this case since Application instance is unique)
+    // but is here for convention.
+    abstract Application application(MyApplication app);
 
 
 }

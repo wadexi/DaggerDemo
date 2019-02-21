@@ -1,7 +1,6 @@
-package com.example.a073105.daggerdemo.dagger2.modules;
+package com.example.a073105.daggerdemo.dagger2.modules.viewmodel;
 
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.example.a073105.daggerdemo.annotation.ViewModelKey;
@@ -10,7 +9,6 @@ import com.example.a073105.daggerdemo.fragments.contacts.ContactsFragModelFactor
 
 import dagger.Binds;
 import dagger.Module;
-import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 
 @Module

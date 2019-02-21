@@ -1,5 +1,7 @@
-package com.example.a073105.daggerdemo.dagger2.modules;
+package com.example.a073105.daggerdemo.dagger2.modules.activity;
 
+import com.example.a073105.daggerdemo.dagger2.modules.fragment.ContactFragmentModule;
+import com.example.a073105.daggerdemo.dagger2.modules.fragment.HomeFragmentModule;
 import com.example.a073105.daggerdemo.fragments.HomeFragment;
 import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragment;
 

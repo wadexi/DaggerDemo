@@ -1,12 +1,9 @@
-package com.example.a073105.daggerdemo.dagger2.modules;
+package com.example.a073105.daggerdemo.dagger2.modules.fragment;
 
 import com.example.a073105.daggerdemo.fragments.contacts.ConstantFragment;
 import com.example.a073105.daggerdemo.fragments.HomeFragment;
 
-import javax.inject.Named;
-
 import dagger.Module;
-import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 
 @Module(

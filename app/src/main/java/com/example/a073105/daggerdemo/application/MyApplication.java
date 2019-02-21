@@ -26,7 +26,8 @@ public class MyApplication extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerAppComponent.builder().application(this).build().inject(this);
+        DaggerAppComponent.builder().create(this).inject(this);
+//        DaggerAppComponent.builder().application(this).build().inject(this);
         Log.d(TAG, "onCreate: bean1:" + bean1.toString());
     }
 
@@ -35,8 +36,4 @@ public class MyApplication extends Application implements HasActivityInjector {
         return dispatchingAndroidInjector;
     }
 
-//    @Override
-//    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-//        return DaggerAppComponent.builder().build();
-//    }
 }

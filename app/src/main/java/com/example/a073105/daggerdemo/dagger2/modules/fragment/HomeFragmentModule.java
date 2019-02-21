@@ -1,4 +1,4 @@
-package com.example.a073105.daggerdemo.dagger2.modules;
+package com.example.a073105.daggerdemo.dagger2.modules.fragment;
 
 import javax.inject.Named;
 

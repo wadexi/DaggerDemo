@@ -25,8 +25,8 @@ public class ResRemoteDataSource {
         this.httpService = httpService;
     }
 
-    public void getCooKMenu(String menu, int num,Callback<CookBookBean> callback){
-        Call<CookBookBean> call = httpService.getCookMenu(menu, num, "cb5c01ff3ee0eeada0d4069ef38b78f4");
+    public void getCooKMenu(String menu, int num,Callback<ResponBean<CookBookBean>> callback){
+        Call<ResponBean<CookBookBean>> call = httpService.getCookMenu(menu, num, "cb5c01ff3ee0eeada0d4069ef38b78f4");
         call.enqueue(callback);
     }
 }

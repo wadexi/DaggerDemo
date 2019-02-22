@@ -25,7 +25,7 @@ import retrofit2.Response;
 public class HomeFragmentModel extends AndroidViewModel {
 
     private static final String TAG = "ConstantFragmentModel";
-    private MutableLiveData<CookBookBean> mutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ResponBean<CookBookBean>> mutableLiveData = new MutableLiveData<>();
 
     private Application application;
 
@@ -52,7 +52,7 @@ public class HomeFragmentModel extends AndroidViewModel {
 //    }
 
 
-    public MutableLiveData<CookBookBean> getMutableLiveData() {
+    public MutableLiveData<ResponBean<CookBookBean>> getMutableLiveData() {
         return mutableLiveData;
     }
 
@@ -60,11 +60,11 @@ public class HomeFragmentModel extends AndroidViewModel {
      * 获取聚合数据的菜谱
      */
     public void getCookMenu(String menu, int num) {
-        dataSource.getCooKMenu(menu,num,new Callback<CookBookBean>() {
+        dataSource.getCooKMenu(menu,num,new Callback<ResponBean<CookBookBean>>() {
             @Override
-            public void onResponse(Call<CookBookBean> call, Response<CookBookBean> response) {
+            public void onResponse(Call<ResponBean<CookBookBean>> call, Response<ResponBean<CookBookBean>> response) {
                 if(response.isSuccessful()){
-                    CookBookBean responBean = response.body();
+                    ResponBean<CookBookBean> responBean = response.body();
                     Log.d(TAG, "onResponse: " + responBean.toString());
                     mutableLiveData.setValue(responBean);
                 }else {
@@ -73,7 +73,7 @@ public class HomeFragmentModel extends AndroidViewModel {
             }
 
             @Override
-            public void onFailure(Call<CookBookBean> call, Throwable t) {
+            public void onFailure(Call<ResponBean<CookBookBean>> call, Throwable t) {
                 Log.w(TAG, "onFailure: ",t );
             }
         });

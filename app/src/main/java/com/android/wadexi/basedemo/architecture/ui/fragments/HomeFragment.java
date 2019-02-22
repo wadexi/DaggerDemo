@@ -70,10 +70,10 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         model = ViewModelProviders.of(this,viewModelFactory).get(HomeFragmentModel.class);
-        model.getMutableLiveData().observe(this, new Observer<CookBookBean>() {
+        model.getMutableLiveData().observe(this, new Observer<ResponBean<CookBookBean>>() {
             @Override
-            public void onChanged(@Nullable CookBookBean cookBookBeanResponBean) {
-                Log.d(TAG, "onChanged: " + cookBookBeanResponBean.toString());
+            public void onChanged(@Nullable ResponBean<CookBookBean> cookBookBeanResponBean) {
+                Log.d(TAG, "onChanged: " + cookBookBeanResponBean.getT().toString());
             }
         });
 

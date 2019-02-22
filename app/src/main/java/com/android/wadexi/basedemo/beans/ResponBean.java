@@ -1,5 +1,7 @@
 package com.android.wadexi.basedemo.beans;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ResponBean<T> {
 
     /**
@@ -12,6 +14,8 @@ public class ResponBean<T> {
     private String resultcode;
     private String reason;
     private int error_code;
+
+    @SerializedName("result")
     private T t;
 
     public String getResultcode() {

@@ -14,6 +14,6 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("cook/query.php")
-    Call<CookBookBean> getCookMenu(@Field("menu") String menu, @Field("rn") int maxNum,
+    Call<ResponBean<CookBookBean>> getCookMenu(@Field("menu") String menu, @Field("rn") int maxNum,
                                              @Field("key") String key);
 }

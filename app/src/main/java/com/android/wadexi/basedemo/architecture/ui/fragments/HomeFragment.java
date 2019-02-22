@@ -7,19 +7,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.wadexi.basedemo.R;
-import com.android.wadexi.basedemo.architecture.viewmodel.fragments.ConstantFragmentModel;
+import com.android.wadexi.basedemo.architecture.ui.adapters.cookmenu.CookMenuAdapter;
 import com.android.wadexi.basedemo.architecture.viewmodel.fragments.HomeFragmentModel;
-import com.android.wadexi.basedemo.beans.ContactData;
 import com.android.wadexi.basedemo.beans.CookBookBean;
 import com.android.wadexi.basedemo.beans.ResponBean;
+import com.android.wadexi.basedemo.recyclerview.RecycleViewDivider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,6 +52,14 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private HomeFragmentModel model;
 
+
+    CookMenuAdapter cookMenuAdapter;
+
+
+
+    private List<CookBookBean.DataBean> mDatas = new ArrayList<>();
+    private RecyclerView recyclerView;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -69,11 +79,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        cookMenuAdapter = new CookMenuAdapter(this, mDatas);
+        recyclerView.setAdapter(cookMenuAdapter);
         model = ViewModelProviders.of(this,viewModelFactory).get(HomeFragmentModel.class);
         model.getMutableLiveData().observe(this, new Observer<ResponBean<CookBookBean>>() {
             @Override
             public void onChanged(@Nullable ResponBean<CookBookBean> cookBookBeanResponBean) {
-                Log.d(TAG, "onChanged: " + cookBookBeanResponBean.getT().toString());
+                CookBookBean cookBookBean = cookBookBeanResponBean.getT();
+                Log.d(TAG, "onChanged: " + cookBookBean.toString());
+                mDatas.clear();
+                mDatas.addAll(cookBookBean.getData());
+                cookMenuAdapter.notifyDataSetChanged();
             }
         });
 
@@ -86,14 +102,21 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        TextView content = rootView.findViewById(R.id.content_text);
-        content.setText(this.content);
+        recyclerView = rootView.findViewById(R.id.home_fragment_recyclerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity().getApplicationContext(),
+                                        LinearLayoutManager.VERTICAL,
+                                        R.drawable.common_divier_line_style));
         return rootView;
     }
 
 
     @Override
     public void onAttach(Context context) {
+
+        int temp = 0;
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {

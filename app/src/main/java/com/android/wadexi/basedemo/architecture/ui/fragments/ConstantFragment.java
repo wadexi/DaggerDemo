@@ -73,7 +73,6 @@ public class ConstantFragment extends Fragment {
      *
      * @return A new instance of fragment ConstantFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ConstantFragment newInstance() {
         ConstantFragment fragment = new ConstantFragment();
         return fragment;

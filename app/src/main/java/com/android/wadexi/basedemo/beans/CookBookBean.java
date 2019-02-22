@@ -105,6 +105,17 @@ public class CookBookBean  {
             this.data = data;
         }
 
+
+        @Override
+        public String toString() {
+            return "ResultBean{" +
+                    "totalNum='" + totalNum + '\'' +
+                    ", pn=" + pn +
+                    ", rn='" + rn + '\'' +
+                    ", data=" + data +
+                    '}';
+        }
+
         public static class DataBean {
             /**
              * id : 25

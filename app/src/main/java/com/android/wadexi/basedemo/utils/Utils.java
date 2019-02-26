@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
@@ -20,6 +21,21 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Utils {
+
+
+    public static boolean isMainTread(){
+        return Looper.getMainLooper().getThread() == Thread.currentThread();
+    }
+
+    public static <T> boolean checkNonNull(T... t) {
+        int size = t.length;
+        for (int i = 0; i < size;i++){
+            if (t[i] == null) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * https://blog.csdn.net/smileiam/article/details/79753745

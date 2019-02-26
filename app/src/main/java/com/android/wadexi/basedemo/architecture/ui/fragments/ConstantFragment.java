@@ -7,10 +7,12 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.android.wadexi.basedemo.R;
 import com.android.wadexi.basedemo.architecture.ui.adapters.ContactAdapter;
 import com.android.wadexi.basedemo.beans.ContactData;
 import com.android.wadexi.basedemo.architecture.viewmodel.fragments.ConstantFragmentModel;
+import com.android.wadexi.basedemo.beans.region.RegionProvince;
 
 import android.support.v4.app.Fragment;
 
@@ -85,13 +88,31 @@ public class ConstantFragment extends Fragment {
         initView();
 
         model = ViewModelProviders.of(this,viewModelFactory).get(ConstantFragmentModel.class);
-        model.getMutableLiveData().observe(this, new Observer<List<ContactData>>() {
+        model.setLifeCycleOwner(this);
+        model.getContactLiveData().observe(this, new Observer<List<ContactData>>() {
             @Override
             public void onChanged(List<ContactData> contactData) {
                 mDatas.clear();
                 mDatas.addAll(contactData);
             }
         });
+
+
+
+        model.getProvinceLiveData().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                Log.d(TAG, "onChanged: 添加省份成功");
+            }
+        });
+
+
+         model.observeProvinceDatas( new Observer<List<RegionProvince>>() {
+             @Override
+             public void onChanged(@Nullable List<RegionProvince> regionProvinces) {
+                 Log.d(TAG, "regionProvinces: " + regionProvinces.toString());
+             }
+         });
 
 
         if(requestPermission()){
@@ -104,7 +125,7 @@ public class ConstantFragment extends Fragment {
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_CONTACTS)
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
@@ -120,7 +141,12 @@ public class ConstantFragment extends Fragment {
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_CONTACTS},
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_CONTACTS,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+                        },
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -136,7 +162,8 @@ public class ConstantFragment extends Fragment {
     private void initData() {
 
         model.getContactDatas();
-
+        model.addProvince();
+        model.queryProvince();
 
     }
 
@@ -203,6 +230,7 @@ public class ConstantFragment extends Fragment {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     initData();
+
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 

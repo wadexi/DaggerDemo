@@ -3,6 +3,7 @@ package com.android.wadexi.basedemo.dagger2.components;
 import com.android.wadexi.basedemo.application.MyApplication;
 import com.android.wadexi.basedemo.dagger2.modules.app.AppModules;
 import com.android.wadexi.basedemo.dagger2.modules.activity.SubComponentModule;
+import com.android.wadexi.basedemo.dagger2.modules.dbroom.RoomModule;
 import com.android.wadexi.basedemo.dagger2.modules.viewmodel.ViewModelModule;
 
 import javax.inject.Singleton;
@@ -14,7 +15,8 @@ import dagger.android.AndroidInjector;
 @Component(modules = {
             AppModules.class,
             SubComponentModule.class,
-            ViewModelModule.class
+            ViewModelModule.class,
+            RoomModule.class
         }
 )
 public interface AppComponent extends AndroidInjector<MyApplication> {

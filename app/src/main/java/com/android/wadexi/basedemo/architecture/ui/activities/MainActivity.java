@@ -1,13 +1,18 @@
 package com.android.wadexi.basedemo.architecture.ui.activities;
 
+import android.Manifest;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +23,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.android.wadexi.basedemo.R;
+import com.android.wadexi.basedemo.architecture.respository.db.AppDB;
 import com.android.wadexi.basedemo.architecture.ui.fragments.ConstantFragment;
 import com.android.wadexi.basedemo.architecture.ui.fragments.FindFragment;
 import com.android.wadexi.basedemo.architecture.ui.fragments.HomeFragment;
@@ -27,6 +34,7 @@ import com.android.wadexi.basedemo.architecture.ui.fragments.MeFragment;
 import com.android.wadexi.basedemo.architecture.viewmodel.activity.HomeViewModel;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,6 +43,10 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener,
@@ -42,9 +54,12 @@ public class MainActivity extends AppCompatActivity
                     ConstantFragment.OnFragmentInteractionListener,
                     FindFragment.OnFragmentInteractionListener,
                     MeFragment.OnFragmentInteractionListener ,
-                    HasSupportFragmentInjector {
+                    HasSupportFragmentInjector /*,
+                    EasyPermissions.PermissionCallbacks,
+                    EasyPermissions.RationaleCallbacks*/{
 
     private static final String TAG = "MainActivity";
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0x01;
 
     @Inject
     DispatchingAndroidInjector<Fragment> supportFragmentInjector;
@@ -53,6 +68,9 @@ public class MainActivity extends AppCompatActivity
     @Named("mainactivity_string")
     String title;
 
+    @Inject
+    AppDB appDB;
+
 //    FrameLayout container;
     FragmentManager supportFragmentManager;
     final HashMap<Class<? extends Fragment>,Fragment> fragmentHashMap = new HashMap<>(4);
@@ -60,6 +78,8 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
 
     RadioGroup radioGroup;
+    private final int RC_READ_WRITE_EXTERNAL_STORAGE = 0x101;
+    private String[] perms;
 
 
     @Override
@@ -72,8 +92,20 @@ public class MainActivity extends AppCompatActivity
         settingHomeFragment();
         settingBottonMenu();
 
+        if(requestPermission()){
+            initRegionData();
+        }
 
+    }
 
+    private void initRegionData() {
+
+        appDB.executeSqlFile(getApplicationContext(), "region/region_province", this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                Log.d(TAG, "onChanged: 初始化省数据完成");
+            }
+        });
     }
 
     private void initViewModel() {
@@ -285,4 +317,115 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    private boolean requestPermission() {
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission_group.STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission_group.STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_CONTACTS,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+                        },
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    initRegionData();
+                }
+                break;
+
+
+        }
+    }
+
+    //    @AfterPermissionGranted(RC_READ_WRITE_EXTERNAL_STORAGE)
+//    private void methodRequiresTwoPermission() {
+//        perms = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+//            perms = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+//        }
+//        if (EasyPermissions.hasPermissions(this.getApplicationContext(), perms)) {
+//
+//            Toast.makeText(this, "已经有读写权限", Toast.LENGTH_SHORT).show();
+//            // Already have permission, do the thing
+//            // ...
+//        } else {
+//            // Do not have permissions, request them now
+//
+//            EasyPermissions.requestPermissions(
+//                    new PermissionRequest.Builder(this, RC_READ_WRITE_EXTERNAL_STORAGE, perms)
+//                            .setRationale("请求读写内存卡的权限")
+//                            .setPositiveButtonText("确定")
+//                            .setNegativeButtonText("取消")
+//                            .setTheme(R.style.Theme_AppCompat_Light_Dialog_Alert)
+//                            .build());
+//        }
+//    }
+//
+//    @Override
+//    public void onRationaleAccepted(int requestCode) {
+//            EasyPermissions.requestPermissions(this, "请求读写权限",
+//                    RC_READ_WRITE_EXTERNAL_STORAGE, perms);
+//    }
+//
+//    @Override
+//    public void onRationaleDenied(int requestCode) {
+//        Toast.makeText(this, "请求权限被拒绝", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        // Forward results to EasyPermissions
+//        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+//    }
+//
+//
+//    @Override
+//    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+//        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+//            // Do something after user returned from app settings screen, like showing a Toast.
+//            Toast.makeText(this, "获取到读取权限", Toast.LENGTH_SHORT)
+//                    .show();
+//        }
+//    }
+//
+//    @Override
+//    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+//        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+//            new AppSettingsDialog.Builder(this).build().show();
+//        }
+//    }
 }

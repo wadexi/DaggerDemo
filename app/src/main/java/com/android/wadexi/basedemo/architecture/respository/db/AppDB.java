@@ -12,6 +12,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.InvalidationTracker;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import com.android.wadexi.basedemo.annotates.AssetsPath;
 import com.android.wadexi.basedemo.architecture.respository.db.dao.RegionAreaDao;
 import com.android.wadexi.basedemo.architecture.respository.db.dao.RegionCityDao;
 import com.android.wadexi.basedemo.architecture.respository.db.dao.RegionProvinceDao;
+import com.android.wadexi.basedemo.beans.Fruit;
 import com.android.wadexi.basedemo.beans.region.RegionArea;
 import com.android.wadexi.basedemo.beans.region.RegionCity;
 import com.android.wadexi.basedemo.beans.region.RegionProvince;
@@ -48,7 +50,7 @@ import java.util.Set;
  * 通过为应用实现 RoomDatabase 来创建一个数据库类
  * 注意该类为抽象类
  */
-@Database(entities = {RegionProvince.class,RegionCity.class,RegionArea.class},version = 2,exportSchema = false)
+@Database(entities = {RegionProvince.class,RegionCity.class,RegionArea.class,Fruit.class},version = 3,exportSchema = false)
 public abstract class AppDB extends RoomDatabase {
 
 
@@ -64,12 +66,33 @@ public abstract class AppDB extends RoomDatabase {
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                              AppDB.class, path)
+                            .fallbackToDestructiveMigrationFrom()
+                            .addMigrations(MIGRATION_2_3)
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+
+
+//    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+//        @Override
+//        public void migrate(SupportSQLiteDatabase database) {
+//            database.execSQL("CREATE TABLE `Fruit` (`id` INTEGER, "
+//                    + "`name` TEXT, PRIMARY KEY(`id`))");
+//        }
+//    };
+
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE `Fruit` (`id` INTEGER NOT NULL, "
+                    + "`name` TEXT, PRIMARY KEY(`id`))");
+//            database.execSQL("ALTER TABLE Book "
+//                    + " ADD COLUMN pub_year INTEGER");
+        }
+    };
 
     public abstract RegionProvinceDao regionProvinceDao();
 

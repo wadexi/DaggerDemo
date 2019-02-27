@@ -2,18 +2,16 @@ package com.android.wadexi.basedemo.architecture.viewmodel.fragments;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.android.wadexi.basedemo.architecture.respository.RegionRespostory;
-import com.android.wadexi.basedemo.architecture.ui.fragments.ConstantFragment;
 import com.android.wadexi.basedemo.beans.ContactData;
 import com.android.wadexi.basedemo.architecture.respository.contentprovider.ResDataSource;
+import com.android.wadexi.basedemo.beans.region.RegionArea;
 import com.android.wadexi.basedemo.beans.region.RegionProvince;
 import com.android.wadexi.basedemo.utils.Utils;
 
@@ -37,7 +35,8 @@ public class ConstantFragmentModel extends AndroidViewModel {
 
     ResDataSource dataSource;
     private LifecycleOwner lifecycleOwner;
-    private Observer<List<RegionProvince>> listObserver;
+    private Observer<List<RegionProvince>> listProvinceObserver;
+    private Observer<List<RegionArea>> listAreaObserver;
 
     @Inject
     public ConstantFragmentModel(@NonNull Application application, ResDataSource dataSource, RegionRespostory respostory) {
@@ -86,10 +85,23 @@ public class ConstantFragmentModel extends AndroidViewModel {
         provinceLiveData.setValue(true);
     }
 
+    /**
+     * 查询所有的省
+     */
     public void queryProvince(){
         LiveData<List<RegionProvince>> listLiveData = regionRespostory.queryRegionProvince();
-        if(Utils.checkNonNull(lifecycleOwner,listObserver)){
-            listLiveData.observe(lifecycleOwner,listObserver);
+        if(Utils.checkNonNull(lifecycleOwner, listProvinceObserver)){
+            listLiveData.observe(lifecycleOwner, listProvinceObserver);
+        }
+    }
+
+    /**
+     * 查询所有的省
+     */
+    public void queryAreas(){
+        LiveData<List<RegionArea>> listLiveData = regionRespostory.queryRegionArea();
+        if(Utils.checkNonNull(lifecycleOwner, listProvinceObserver)){
+            listLiveData.observe(lifecycleOwner, listAreaObserver);
         }
     }
 
@@ -99,6 +111,12 @@ public class ConstantFragmentModel extends AndroidViewModel {
     }
 
     public void observeProvinceDatas(Observer<List<RegionProvince>> observer) {
-        listObserver = observer;
+        listProvinceObserver = observer;
     }
+
+     public void observeAreaDatas(Observer<List<RegionArea>> observer) {
+         listAreaObserver = observer;
+    }
+
+
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.wadexi.basedemo.architecture.respository.db.AppDB;
 import com.android.wadexi.basedemo.architecture.respository.db.RoomExecutors;
+import com.android.wadexi.basedemo.beans.region.RegionArea;
 import com.android.wadexi.basedemo.beans.region.RegionProvince;
 import com.android.wadexi.basedemo.utils.Utils;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -53,7 +54,15 @@ public class RegionRespostory {
     }
 
     /**
-     * 添加省份
+     * 查询所有的省
+     */
+    public LiveData<List<RegionArea>> queryRegionArea(){
+
+        return appDB.regionAreaDao().query();
+    }
+
+    /**
+     * 查询所有的省
      */
     public LiveData<List<RegionProvince>> queryRegionProvince(){
 

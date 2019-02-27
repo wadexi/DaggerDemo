@@ -22,6 +22,7 @@ import com.android.wadexi.basedemo.R;
 import com.android.wadexi.basedemo.architecture.ui.adapters.ContactAdapter;
 import com.android.wadexi.basedemo.beans.ContactData;
 import com.android.wadexi.basedemo.architecture.viewmodel.fragments.ConstantFragmentModel;
+import com.android.wadexi.basedemo.beans.region.RegionArea;
 import com.android.wadexi.basedemo.beans.region.RegionProvince;
 
 import android.support.v4.app.Fragment;
@@ -114,6 +115,13 @@ public class ConstantFragment extends Fragment {
              }
          });
 
+        model.observeAreaDatas( new Observer<List<RegionArea>>() {
+             @Override
+             public void onChanged(@Nullable List<RegionArea> regionAreas) {
+                 Log.d(TAG, "RegionAreas: " + regionAreas.toString());
+             }
+         });
+
 
         if(requestPermission()){
             initData();
@@ -162,8 +170,9 @@ public class ConstantFragment extends Fragment {
     private void initData() {
 
         model.getContactDatas();
-        model.addProvince();
+//        model.addProvince();
         model.queryProvince();
+        model.queryAreas();
 
     }
 

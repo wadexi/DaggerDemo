@@ -22,6 +22,6 @@ public interface RegionAreaDao {
     void save(RegionArea regionProvince);
 
 
-    @Query("select * from region_area")
+    @Query("select * from region_areas")
     LiveData<List<RegionArea>> query();//注意此处返回的的livedata数据
 }

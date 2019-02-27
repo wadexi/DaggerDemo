@@ -1,6 +1,7 @@
 package com.android.wadexi.basedemo.architecture.respository.db;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.arch.lifecycle.ComputableLiveData;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
@@ -47,7 +48,7 @@ import java.util.Set;
  * 通过为应用实现 RoomDatabase 来创建一个数据库类
  * 注意该类为抽象类
  */
-@Database(entities = {RegionProvince.class,RegionCity.class,RegionArea.class},version = 1,exportSchema = false)
+@Database(entities = {RegionProvince.class,RegionCity.class,RegionArea.class},version = 2,exportSchema = false)
 public abstract class AppDB extends RoomDatabase {
 
 
@@ -81,59 +82,10 @@ public abstract class AppDB extends RoomDatabase {
      * 执行sql脚本
      */
     @SuppressLint("StaticFieldLeak")
+    public LiveData<Boolean> executeSqlFile(Activity context, @AssetsPath String path,
+                                            LifecycleOwner lifecycleOwner, Observer<Boolean> observer)
+                                            {
 
-    public LiveData<Boolean> executeSqlFile(Context context,@AssetsPath String path,
-                                            LifecycleOwner lifecycleOwner,Observer<Boolean> observer)
-                                            throws MySqlException{
-
-
-        List<String> sqls = new ArrayList<>();
-
-        BufferedReader bufReader = null;
-        try {
-            InputStreamReader inputReader = new InputStreamReader( context.getResources().getAssets().open(path),"UTF-8" );
-            bufReader = new BufferedReader(inputReader);
-            String sql="";
-            while((sql = bufReader.readLine()) != null){
-//                String sql = bufReader.readLine();
-                sqls.add(sql);
-            }
-        } catch (Exception e) {
-            throw new MySqlException("请输入正确的路径（assets目录下的sql脚本文件路径）",e);
-        }finally {
-            if(Utils.checkNonNull(bufReader)){
-                try {
-                    assert bufReader != null;
-                    bufReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-
-//        BufferedReader streamReader =null;
-//        try {
-////            StandardCharsets.UTF_8
-//            streamReader = new BufferedReader(new FileReader(context.getAssets().openFd(path).getFileDescriptor()));
-//
-//            while (streamReader.readLine() != null){
-//                String sql = streamReader.readLine();
-//                sqls.add(sql);
-//            }
-//        } catch (IOException e) {
-//           throw new MySqlException("请输入正确的路径（assets目录下的sql脚本文件路径）",e);
-//        }finally {
-//            if(Utils.checkNonNull(streamReader)){
-//                try {
-//                    assert streamReader != null;
-//                    streamReader.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//        }
 
         MutableLiveData<Boolean> liveData = new MutableLiveData<>();
         liveData.observe(lifecycleOwner,observer);
@@ -141,19 +93,47 @@ public abstract class AppDB extends RoomDatabase {
 
             @Override
             protected Boolean doInBackground(Void[] objects) {
-                SupportSQLiteDatabase mDatabase = INSTANCE.mDatabase;
+                List<String> sqls = new ArrayList<>();
 
+                BufferedReader bufReader = null;
                 try {
-                    mDatabase.beginTransaction();
-                    for (String sql:sqls) {
-                        mDatabase.execSQL(sql);
+                    InputStreamReader inputReader = new InputStreamReader( context.getResources().getAssets().open(path),"UTF-8" );
+                    bufReader = new BufferedReader(inputReader);
+                    String sql="";
+                    while((sql = bufReader.readLine()) != null){
+//                String sql = bufReader.readLine();
+                        sqls.add(sql);
                     }
-                    mDatabase.setTransactionSuccessful();
+                } catch (Exception e) {
+                    new MySqlException ("可能原因：\n 请输入正确的路径（assets目录下的sql脚本文件路径）",e).printStackTrace();
+//                    e.printStackTrace();
+                    return false;
+                }finally {
+                    if(Utils.checkNonNull(bufReader)){
+                        try {
+                            assert bufReader != null;
+                            bufReader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+                SupportSQLiteDatabase db = INSTANCE.getOpenHelper().getWritableDatabase();
+                try {
+
+//                    mDatabase.beginTransaction();//也ok
+                    db.beginTransaction();
+                    for (String sql:sqls) {
+                        db.execSQL(sql);
+                    }
+                    db.setTransactionSuccessful();
                     return true;
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    mDatabase.endTransaction();
+                    db.endTransaction();
                 }
                return false;
 

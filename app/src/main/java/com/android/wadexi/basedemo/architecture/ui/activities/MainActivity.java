@@ -32,7 +32,9 @@ import com.android.wadexi.basedemo.architecture.ui.fragments.FindFragment;
 import com.android.wadexi.basedemo.architecture.ui.fragments.HomeFragment;
 import com.android.wadexi.basedemo.architecture.ui.fragments.MeFragment;
 import com.android.wadexi.basedemo.architecture.viewmodel.activity.HomeViewModel;
+import com.android.wadexi.basedemo.exceptions.MySqlException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -100,12 +102,44 @@ public class MainActivity extends AppCompatActivity
 
     private void initRegionData() {
 
-        appDB.executeSqlFile(getApplicationContext(), "region/region_province", this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                Log.d(TAG, "onChanged: 初始化省数据完成");
-            }
-        });
+
+
+            appDB.executeSqlFile(MainActivity.this, "region/region_province.sql", this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
+                    if(aBoolean){
+                        Log.d(TAG, "onChanged: 初始化省数据完成");
+                    }else {
+                        Log.d(TAG, "onChanged: 初始化省数据失败");
+                    }
+
+                }
+            });
+
+
+            appDB.executeSqlFile(MainActivity.this, "region/region_cities.sql", this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
+                    if(aBoolean){
+                        Log.d(TAG, "onChanged: 初始化城市数据完成");
+                    }else {
+                        Log.d(TAG, "onChanged: 初始化城市数据失败");
+                    }
+
+                }
+            });
+
+            appDB.executeSqlFile(MainActivity.this, "region/region_areas.sql", this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
+                    if(aBoolean){
+                        Log.d(TAG, "onChanged: 初始化区域数据完成");
+                    }else {
+                        Log.d(TAG, "onChanged: 初始化取悦数据失败");
+                    }
+
+                }
+            });
     }
 
     private void initViewModel() {
@@ -321,8 +355,8 @@ public class MainActivity extends AppCompatActivity
     private boolean requestPermission() {
 
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission_group.STORAGE)
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
@@ -339,8 +373,8 @@ public class MainActivity extends AppCompatActivity
 
                 ActivityCompat.requestPermissions(this,
                         new String[]{
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.READ_CONTACTS,
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
 
                         },
@@ -362,7 +396,7 @@ public class MainActivity extends AppCompatActivity
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initRegionData();
+//                    initRegionData();
                 }
                 break;
 

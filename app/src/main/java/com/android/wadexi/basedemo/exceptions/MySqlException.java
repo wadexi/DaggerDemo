@@ -1,6 +1,6 @@
 package com.android.wadexi.basedemo.exceptions;
 
-public class MySqlException extends RuntimeException{
+public class MySqlException extends Exception{
 
     private MySqlException() {
     }
@@ -17,7 +17,7 @@ public class MySqlException extends RuntimeException{
         super(cause);
     }
 
-    public MySqlException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
+//    public MySqlException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+//        super(message, cause, enableSuppression, writableStackTrace);
+//    }
 }

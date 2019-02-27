@@ -5,7 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "region_area",foreignKeys = @ForeignKey(entity = RegionCity.class,parentColumns = "id",childColumns = "pId"))
+@Entity(tableName = "region_areas",foreignKeys = @ForeignKey(entity = RegionCity.class,parentColumns = "id",childColumns = "pId"))
 public class RegionArea {
 
     @PrimaryKey(autoGenerate = false)
